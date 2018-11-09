@@ -63,12 +63,8 @@ public class description_movie extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 long id = database.insertData(judul, description, image);
-                Log.d("favoritku", "id: "+id);
-                Log.d("favoritku", "judul: "+judul);
-                Log.d("favoritku", "description: "+description);
-                Log.d("favoritku", "image: "+image);
+
             }
         });
     }

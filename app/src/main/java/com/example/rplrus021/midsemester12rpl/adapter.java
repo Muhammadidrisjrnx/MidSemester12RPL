@@ -59,10 +59,13 @@ public class adapter extends RecyclerView.Adapter<adapter.Holder> {
         holder.button_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                final int position2 = position;
                 final String judul = data2.getJudul();
+//                database_helper.delete(judul);
                 database_helper.delete(judul);
-                Intent intent = new Intent(context.getApplicationContext(), home.class);
-                context.startActivity(intent);
+                data.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position,data.size());
             }
         });
     }

@@ -117,7 +117,7 @@ public class home extends AppCompatActivity {
                 jsonObject = null;
             }
             return jsonObject;
-      }
+        }
 
         @Override
         protected void onPostExecute(JSONObject jsonObject) {
@@ -132,13 +132,15 @@ public class home extends AppCompatActivity {
                         String title = Result.getJSONObject(i).getString("title");
                         String overview = Result.getJSONObject(i).getString("overview");
                         String poster_path = Result.getJSONObject(i).getString("poster_path");
-                        String image = only_url.url+poster_path;
-                        int hasil = 0;
-                        if (hasil == 0) {
-                            Log.e("TAG", "onPostExecute: " + "cannot insert");
-                            long id = database.insertData(title, overview, image);
-                            data = database.getData();
-                        }
+                        String image = only_url.url + poster_path;
+                        long id = database.insertData(title, overview, image);
+                        data = database.getData();
+//                        data all = new data();
+//                        all.setJudul(title);
+//                        all.setDescription(overview);
+//                        all.setGambar(image);
+//                        data.add(all);
+
                     }
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(home.this));
