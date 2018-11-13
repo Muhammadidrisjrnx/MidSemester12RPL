@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -24,10 +25,14 @@ public class description_movie extends AppCompatActivity {
     Button button_trailer;
     FloatingActionButton floatingActionButton;
     database_favorite database;
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description_movie);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        
         imageview_movie = (ImageView) findViewById(R.id.imageview_movie);
         textview_judul = (TextView) findViewById(R.id.textview_judul);
         textview_description = (TextView) findViewById(R.id.textview_description);
