@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,10 +15,14 @@ public class login extends AppCompatActivity {
     String email, password;
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
+    Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         edt_email = (EditText) findViewById(R.id.edt_email);
         edt_password = (EditText) findViewById(R.id.edt_password);
         btn_login = (Button) findViewById(R.id.btn_login);
@@ -30,11 +35,11 @@ public class login extends AppCompatActivity {
                     edt_email.setError("Please write email");
                     edt_password.setError("Please write password");
                 } else if (email.equals("zero") && password.equals("admin")) {
-                    Intent intent = new Intent(getApplicationContext(),home.class);
-                    sharedPreferences = getSharedPreferences("login",MODE_PRIVATE);
+                    Intent intent = new Intent(getApplicationContext(), home.class);
+                    sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
                     editor = sharedPreferences.edit();
-                    editor.putString("email",email);
-                    editor.putString("password",password);
+                    editor.putString("email", email);
+                    editor.putString("password", password);
                     editor.apply();
                     startActivity(intent);
                     finish();
