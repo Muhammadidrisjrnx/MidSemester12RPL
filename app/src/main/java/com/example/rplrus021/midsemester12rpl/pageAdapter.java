@@ -15,10 +15,10 @@ public class pageAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-            case 1:
+            case 0:
                 now_playing nowPlaying = new now_playing();
                 return nowPlaying;
-            case 2:
+            case 1:
                 upcoming upcoming = new upcoming();
                 return upcoming;
             default:

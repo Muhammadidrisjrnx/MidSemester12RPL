@@ -8,53 +8,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class data {
-//    private String judul;
-//    private String gambar;
-//    private String description;
-//    private int id;
-//
-//    public data() {
-//
-//    }
-//
-//    public data(int id, String judul, String gambar, String description) {
-//        this.id = id;
-//        this.judul = judul;
-//        this.gambar = gambar;
-//        this.description = description;
-//    }
-//
-//    public String getJudul() {
-//        return judul;
-//    }
-//
-//    public void setJudul(String judul) {
-//        this.judul = judul;
-//    }
-//
-//    public String getGambar() {
-//        return gambar;
-//    }
-//
-//    public void setGambar(String gambar) {
-//        this.gambar = gambar;
-//    }
-//
-//    public String getDescription() {
-//        return description;
-//    }
-//
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
-//
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
 
     @SerializedName("vote_count")
     @Expose

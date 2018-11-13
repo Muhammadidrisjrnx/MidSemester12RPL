@@ -6,9 +6,11 @@
     tools:context=".now_playing">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycle_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="now_playing" />
+        android:background="#e4dddd"/>
+
 
 </FrameLayout>

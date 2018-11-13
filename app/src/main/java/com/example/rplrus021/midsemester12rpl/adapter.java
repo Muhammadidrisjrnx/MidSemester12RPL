@@ -3,6 +3,7 @@ package com.example.rplrus021.midsemester12rpl;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import java.util.ArrayList;
 public class adapter extends RecyclerView.Adapter<adapter.Holder> {
     private ArrayList<data> data;
     Context context;
-    only_url url;
     database_helper database_helper;
 
     public adapter(Context context, ArrayList<data> data) {
@@ -37,7 +37,7 @@ public class adapter extends RecyclerView.Adapter<adapter.Holder> {
         final data data2 = data.get(position);
 
         Glide.with(context)
-                .load(data2.getPosterPath())
+                .load(only_url.url+data2.getPosterPath())
                 .into(holder.imageView);
         holder.textView.setText(data2.getTitle());
         holder.button_description.setOnClickListener(new View.OnClickListener() {

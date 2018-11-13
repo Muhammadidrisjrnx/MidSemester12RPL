@@ -5,10 +5,16 @@ import android.content.AsyncTaskLoader;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,55 +34,68 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class home extends AppCompatActivity {
-    public ArrayList<data> data;
-    RecyclerView recyclerView;
-    database_helper database;
+    private Toolbar toolbar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        recyclerView = (RecyclerView) findViewById(R.id.recycle_view);
-        database = new database_helper(this);
-//        new load().execute();
-        load_data_from_json();
-        recyclerView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Toast.makeText(getApplicationContext(), "Click", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-        });
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
-    private void load_data_from_json() {
-        json_api service = retrofitclientinstance.getRetrofitInstance().create(json_api.class);
-        Call<jsonRespond> call = service.getJson();
-        call.enqueue(new Callback<jsonRespond>() {
-            @Override
-            public void onResponse(Call<jsonRespond> call, Response<jsonRespond> response) {
-                jsonRespond jsonRespond = response.body();
-                data = new ArrayList<>(Arrays.asList(jsonRespond.getResults()));
-                adapter adapter = new adapter(home.this,data);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
-                recyclerView.setLayoutManager(linearLayoutManager);
-                recyclerView.setAdapter(adapter);
-
-            }
-
-            @Override
-            public void onFailure(Call<jsonRespond> call, Throwable t) {
-
-            }
-        });
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new now_playing(), "Now Playing");
+        adapter.addFragment(new upcoming(), "Up Coming");
+        viewPager.setAdapter(adapter);
     }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
