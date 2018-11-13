@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +27,7 @@ public class upcoming extends Fragment {
     View root;
     RecyclerView recyclerView;
     public ArrayList<data> data;
+    ShimmerFrameLayout shimmerFrameLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,6 +35,8 @@ public class upcoming extends Fragment {
         // Inflate the layout for this fragment
         root = inflater.inflate(R.layout.fragment_upcoming, container, false);
         recyclerView = (RecyclerView) root.findViewById(R.id.recycle_view);
+        shimmerFrameLayout = (ShimmerFrameLayout) root.findViewById(R.id.shimmer_view_container);
+        shimmerFrameLayout.startShimmerAnimation();
         load_data_upcoming();
         return root;
     }
@@ -43,12 +49,14 @@ public class upcoming extends Fragment {
             public void onResponse(Call<jsonRespond> call, Response<jsonRespond> response) {
                 jsonRespond jsonRespond = response.body();
                 data = new ArrayList<>(Arrays.asList(jsonRespond.getResults()));
-                Log.d("responku", "onResponse: "+jsonRespond.getResults());
+                Log.d("responku", "onResponse: " + jsonRespond.getResults());
                 adapter adapter = new adapter(root.getContext(), data);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(root.getContext());
                 recyclerView.setLayoutManager(linearLayoutManager);
+                recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(adapter);
-
+                shimmerFrameLayout.stopShimmerAnimation();
+                shimmerFrameLayout.setVisibility(View.GONE);
             }
 
             @Override
