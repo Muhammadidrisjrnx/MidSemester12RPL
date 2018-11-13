@@ -14,8 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.rplrus021.midsemester12rpl.database.MahasiswaHelper;
-import com.example.rplrus021.midsemester12rpl.database.MahasiswaModel;
 
 public class description_movie extends AppCompatActivity {
     ImageView imageview_movie;

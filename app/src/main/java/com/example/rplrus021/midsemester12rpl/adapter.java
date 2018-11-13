@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.rplrus021.midsemester12rpl.database.MahasiswaHelper;
 
 import java.util.ArrayList;
 
