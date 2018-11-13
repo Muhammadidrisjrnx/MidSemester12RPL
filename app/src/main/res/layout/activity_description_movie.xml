@@ -8,6 +8,7 @@
     android:orientation="vertical"
     tools:context=".description_movie">
 
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -20,14 +21,14 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar" />
+            app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"></android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
     <ImageView
-        android:layout_below="@+id/app_bar"
         android:id="@+id/imageview_movie"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_below="@+id/app_bar"
         android:background="#ffffff"
         android:src="@mipmap/ic_launcher_round" />
 

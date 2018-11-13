@@ -26,13 +26,14 @@ public class description_movie extends AppCompatActivity {
     FloatingActionButton floatingActionButton;
     database_favorite database;
     Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description_movie);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         imageview_movie = (ImageView) findViewById(R.id.imageview_movie);
         textview_judul = (TextView) findViewById(R.id.textview_judul);
         textview_description = (TextView) findViewById(R.id.textview_description);
@@ -71,4 +72,11 @@ public class description_movie extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
 }
