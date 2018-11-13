@@ -26,7 +26,7 @@ import retrofit2.Response;
 public class now_playing extends Fragment {
     public ArrayList<data> data;
     RecyclerView recyclerView;
-    //database_helper database;
+    database_helper database;
     View rootView;
     ShimmerFrameLayout shimmerFrameLayout;
 
@@ -36,7 +36,7 @@ public class now_playing extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_now_playing, container, false);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recycle_view);
-        //database = new database_helper(getActivity());
+        database = new database_helper(rootView.getContext());
         shimmerFrameLayout = (ShimmerFrameLayout) rootView.findViewById(R.id.shimmer_view_container);
         shimmerFrameLayout.startShimmerAnimation();
         load_data_from_json();
