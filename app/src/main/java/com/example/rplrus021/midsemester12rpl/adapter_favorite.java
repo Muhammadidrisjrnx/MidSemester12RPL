@@ -17,10 +17,12 @@ import java.util.ArrayList;
 public class adapter_favorite extends RecyclerView.Adapter<adapter_favorite.Holder> {
     ArrayList<data> arrayList;
     Context context;
+    database_favorite database_favorite;
 
     public adapter_favorite(Context context, ArrayList<data> arrayList) {
         this.context = context;
         this.arrayList = arrayList;
+        database_favorite = new database_favorite(context);
     }
 
     @Override
@@ -30,11 +32,22 @@ public class adapter_favorite extends RecyclerView.Adapter<adapter_favorite.Hold
     }
 
     @Override
-    public void onBindViewHolder(Holder holder, int position) {
+    public void onBindViewHolder(Holder holder, final int position) {
+        final data data2 = arrayList.get(position);
         Glide.with(context)
                 .load(arrayList.get(position).getGambar())
                 .into(holder.image_view);
         holder.textView.setText(arrayList.get(position).getJudul());
+        holder.button_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final String judul = data2.getJudul();
+                database_favorite.delete(judul);
+                arrayList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, arrayList.size());
+            }
+        });
     }
 
     @Override
@@ -45,13 +58,14 @@ public class adapter_favorite extends RecyclerView.Adapter<adapter_favorite.Hold
     public class Holder extends RecyclerView.ViewHolder {
         ImageView image_view;
         TextView textView;
-        Button button;
+        Button button, button_delete;
 
         public Holder(View itemView) {
             super(itemView);
             image_view = (ImageView) itemView.findViewById(R.id.image_view);
             textView = (TextView) itemView.findViewById(R.id.textview_judul);
             button = (Button) itemView.findViewById(R.id.btn_details);
+            button_delete = (Button) itemView.findViewById(R.id.btn_delete);
         }
     }
 }

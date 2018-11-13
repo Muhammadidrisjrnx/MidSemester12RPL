@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.rplrus021.midsemester12rpl.database.MahasiswaHelper;
 
 import java.util.ArrayList;
 
@@ -19,10 +20,12 @@ public class adapter extends RecyclerView.Adapter<adapter.Holder> {
     Context context;
     only_url url;
     database_helper database_helper;
+//    MahasiswaHelper mahasiswaHelper;
 
     public adapter(Context context, ArrayList<data> data) {
         this.context = context;
         this.data = data;
+//        mahasiswaHelper=new MahasiswaHelper(context);
         database_helper = new database_helper(context);
     }
 
@@ -61,11 +64,21 @@ public class adapter extends RecyclerView.Adapter<adapter.Holder> {
             public void onClick(View view) {
                 final int position2 = position;
                 final String judul = data2.getJudul();
-//                database_helper.delete(judul);
                 database_helper.delete(judul);
                 data.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position,data.size());
+//                int id=data2.getId();
+//                mahasiswaHelper.open();
+//                mahasiswaHelper.beginTransaction();
+//                mahasiswaHelper.delete(id+"");
+//                mahasiswaHelper.setTransactionSuccess();
+//                mahasiswaHelper.endTransaction();
+//                mahasiswaHelper.close();
+//                data.remove(position);
+//                notifyItemRemoved(position);
+//                notifyItemRangeChanged(position,data.size());
+
             }
         });
     }
