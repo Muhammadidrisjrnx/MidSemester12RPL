@@ -35,13 +35,13 @@ public class adapter_favorite extends RecyclerView.Adapter<adapter_favorite.Hold
     public void onBindViewHolder(Holder holder, final int position) {
         final data data2 = arrayList.get(position);
         Glide.with(context)
-                .load(arrayList.get(position).getGambar())
+                .load(arrayList.get(position).getPosterPath())
                 .into(holder.image_view);
-        holder.textView.setText(arrayList.get(position).getJudul());
+        holder.textView.setText(arrayList.get(position).getTitle());
         holder.button_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String judul = data2.getJudul();
+                final String judul = data2.getTitle();
                 database_favorite.delete(judul);
                 arrayList.remove(position);
                 notifyItemRemoved(position);

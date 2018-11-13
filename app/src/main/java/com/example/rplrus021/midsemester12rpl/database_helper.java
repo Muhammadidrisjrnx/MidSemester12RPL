@@ -36,9 +36,9 @@ public class database_helper {
         if (cursor.getCount()>0) {
             do {
                 dataModel = new data();
-                dataModel.setJudul(cursor.getString(cursor.getColumnIndexOrThrow(database_sql2.title)));
-                dataModel.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(database_sql2.overview)));
-                dataModel.setGambar(cursor.getString(cursor.getColumnIndexOrThrow(database_sql2.poster_path)));
+                dataModel.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(database_sql2.title)));
+                dataModel.setOverview(cursor.getString(cursor.getColumnIndexOrThrow(database_sql2.overview)));
+                dataModel.setPosterPath(cursor.getString(cursor.getColumnIndexOrThrow(database_sql2.poster_path)));
                 arrayList.add(dataModel);
                 cursor.moveToNext();
 

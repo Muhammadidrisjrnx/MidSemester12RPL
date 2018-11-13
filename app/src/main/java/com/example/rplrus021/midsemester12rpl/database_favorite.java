@@ -35,9 +35,9 @@ public class database_favorite {
         if (cursor.getCount()>0) {
             do {
                 dataModel = new data();
-                dataModel.setJudul(cursor.getString(cursor.getColumnIndexOrThrow(database_sql.title)));
-                dataModel.setDescription(cursor.getString(cursor.getColumnIndexOrThrow(database_sql.overview)));
-                dataModel.setGambar(cursor.getString(cursor.getColumnIndexOrThrow(database_sql.poster_path)));
+                dataModel.setTitle(cursor.getString(cursor.getColumnIndexOrThrow(database_sql.title)));
+                dataModel.setOverview(cursor.getString(cursor.getColumnIndexOrThrow(database_sql.overview)));
+                dataModel.setPosterPath(cursor.getString(cursor.getColumnIndexOrThrow(database_sql.poster_path)));
                 arrayList.add(dataModel);
                 cursor.moveToNext();
 

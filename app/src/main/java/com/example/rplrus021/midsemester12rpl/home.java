@@ -46,12 +46,35 @@ public class home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         recyclerView = (RecyclerView) findViewById(R.id.recycle_view);
         database = new database_helper(this);
-        new load().execute();
+//        new load().execute();
+        load_data_from_json();
         recyclerView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 Toast.makeText(getApplicationContext(), "Click", Toast.LENGTH_SHORT).show();
                 return false;
+            }
+        });
+    }
+
+    private void load_data_from_json() {
+        json_api service = retrofitclientinstance.getRetrofitInstance().create(json_api.class);
+        Call<jsonRespond> call = service.getJson();
+        call.enqueue(new Callback<jsonRespond>() {
+            @Override
+            public void onResponse(Call<jsonRespond> call, Response<jsonRespond> response) {
+                jsonRespond jsonRespond = response.body();
+                data = new ArrayList<>(Arrays.asList(jsonRespond.getResults()));
+                adapter adapter = new adapter(home.this,data);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+                recyclerView.setLayoutManager(linearLayoutManager);
+                recyclerView.setAdapter(adapter);
+
+            }
+
+            @Override
+            public void onFailure(Call<jsonRespond> call, Throwable t) {
+
             }
         });
     }
@@ -81,77 +104,77 @@ public class home extends AppCompatActivity {
     }
 
 
-    @SuppressLint("StaticFieldLeak")
-    public class load extends AsyncTask<Void, Void, JSONObject> {
-
-
-        @Override
-        protected void onPreExecute() {
-
-        }
-
-        @Override
-        protected JSONObject doInBackground(Void... params) {
-            JSONObject jsonObject;
-
-            try {
-                String url = "https://api.themoviedb.org/3/movie/now_playing?api_key=7b91b2135beb96ab098d2f376ee5658b";
-                System.out.println(url);
-                DefaultHttpClient httpClient = new DefaultHttpClient();
-                HttpGet httpGet = new HttpGet(url);
-                HttpResponse httpResponse = httpClient.execute(httpGet);
-                HttpEntity httpEntity = httpResponse.getEntity();
-                InputStream inputStream = httpEntity.getContent();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(
-                        inputStream, "iso-8859-1"
-                ), 8);
-                StringBuilder stringBuilder = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    stringBuilder.append(line).append("\n");
-                }
-                inputStream.close();
-                String json = stringBuilder.toString();
-                jsonObject = new JSONObject(json);
-            } catch (Exception e) {
-                jsonObject = null;
-            }
-            return jsonObject;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject jsonObject) {
-            Log.d("hasil json ", "onPostExecute: " + jsonObject.toString());
-
-            if (jsonObject != null) {
-                try {
-                    JSONArray Result = jsonObject.getJSONArray("results");
-                    data = new ArrayList<>();
-                    for (int i = 0; i < Result.length(); i++) {
-                        String id_movie = Result.getJSONObject(i).getString("id");
-                        String title = Result.getJSONObject(i).getString("title");
-                        String overview = Result.getJSONObject(i).getString("overview");
-                        String poster_path = Result.getJSONObject(i).getString("poster_path");
-                        String image = only_url.url + poster_path;
-                        long id = database.insertData(title, overview, image);
-                        data = database.getData();
-//                        data all = new data();
-//                        all.setJudul(title);
-//                        all.setDescription(overview);
-//                        all.setGambar(image);
-//                        data.add(all);
-
-                    }
-
-                    recyclerView.setLayoutManager(new LinearLayoutManager(home.this));
-                    adapter adapter = new adapter(home.this, data);
-                    recyclerView.setAdapter(adapter);
-
-                } catch (Exception ignored) {
-                    ignored.printStackTrace();
-                }
-            }
-        }
-    }
+//    @SuppressLint("StaticFieldLeak")
+//    public class load extends AsyncTask<Void, Void, JSONObject> {
+//
+//
+//        @Override
+//        protected void onPreExecute() {
+//
+//        }
+//
+//        @Override
+//        protected JSONObject doInBackground(Void... params) {
+//            JSONObject jsonObject;
+//
+//            try {
+//                String url = "https://api.themoviedb.org/3/movie/now_playing?api_key=7b91b2135beb96ab098d2f376ee5658b";
+//                System.out.println(url);
+//                DefaultHttpClient httpClient = new DefaultHttpClient();
+//                HttpGet httpGet = new HttpGet(url);
+//                HttpResponse httpResponse = httpClient.execute(httpGet);
+//                HttpEntity httpEntity = httpResponse.getEntity();
+//                InputStream inputStream = httpEntity.getContent();
+//                BufferedReader reader = new BufferedReader(new InputStreamReader(
+//                        inputStream, "iso-8859-1"
+//                ), 8);
+//                StringBuilder stringBuilder = new StringBuilder();
+//                String line;
+//                while ((line = reader.readLine()) != null) {
+//                    stringBuilder.append(line).append("\n");
+//                }
+//                inputStream.close();
+//                String json = stringBuilder.toString();
+//                jsonObject = new JSONObject(json);
+//            } catch (Exception e) {
+//                jsonObject = null;
+//            }
+//            return jsonObject;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(JSONObject jsonObject) {
+//            Log.d("hasil json ", "onPostExecute: " + jsonObject.toString());
+//
+//            if (jsonObject != null) {
+//                try {
+//                    JSONArray Result = jsonObject.getJSONArray("results");
+//                    data = new ArrayList<>();
+//                    for (int i = 0; i < Result.length(); i++) {
+//                        String id_movie = Result.getJSONObject(i).getString("id");
+//                        String title = Result.getJSONObject(i).getString("title");
+//                        String overview = Result.getJSONObject(i).getString("overview");
+//                        String poster_path = Result.getJSONObject(i).getString("poster_path");
+//                        String image = only_url.url + poster_path;
+//                        long id = database.insertData(title, overview, image);
+//                        data = database.getData();
+////                        data all = new data();
+////                        all.setJudul(title);
+////                        all.setDescription(overview);
+////                        all.setGambar(image);
+////                        data.add(all);
+//
+//                    }
+//
+//                    recyclerView.setLayoutManager(new LinearLayoutManager(home.this));
+//                    adapter adapter = new adapter(home.this, data);
+//                    recyclerView.setAdapter(adapter);
+//
+//                } catch (Exception ignored) {
+//                    ignored.printStackTrace();
+//                }
+//            }
+//        }
+//    }
 
 }

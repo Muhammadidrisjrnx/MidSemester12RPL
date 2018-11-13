@@ -19,12 +19,10 @@ public class adapter extends RecyclerView.Adapter<adapter.Holder> {
     Context context;
     only_url url;
     database_helper database_helper;
-//    MahasiswaHelper mahasiswaHelper;
 
     public adapter(Context context, ArrayList<data> data) {
         this.context = context;
         this.data = data;
-//        mahasiswaHelper=new MahasiswaHelper(context);
         database_helper = new database_helper(context);
     }
 
@@ -39,16 +37,16 @@ public class adapter extends RecyclerView.Adapter<adapter.Holder> {
         final data data2 = data.get(position);
 
         Glide.with(context)
-                .load(data2.getGambar())
+                .load(data2.getPosterPath())
                 .into(holder.imageView);
-        holder.textView.setText(data2.getJudul());
+        holder.textView.setText(data2.getTitle());
         holder.button_description.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final int position1 = position;
-                final String judul = data2.getJudul();
-                final String description = data2.getDescription();
-                final String gambar = data2.getGambar();
+                final String judul = data2.getTitle();
+                final String description = data2.getOverview();
+                final String gambar = data2.getPosterPath();
                 Intent intent = new Intent(context.getApplicationContext(), description_movie.class);
                 intent.putExtra("judul", judul);
                 intent.putExtra("description", description);
@@ -62,23 +60,12 @@ public class adapter extends RecyclerView.Adapter<adapter.Holder> {
             @Override
             public void onClick(View view) {
                 final int position2 = position;
-                final String judul = data2.getJudul();
+                final String judul = data2.getTitle();
                 database_helper.delete(judul);
                 data.remove(position);
                 notifyItemRemoved(position);
                 notifyItemRangeChanged(position,data.size());
-//                int id=data2.getId();
-//                mahasiswaHelper.open();
-//                mahasiswaHelper.beginTransaction();
-//                mahasiswaHelper.delete(id+"");
-//                mahasiswaHelper.setTransactionSuccess();
-//                mahasiswaHelper.endTransaction();
-//                mahasiswaHelper.close();
-//                data.remove(position);
-//                notifyItemRemoved(position);
-//                notifyItemRangeChanged(position,data.size());
-
-            }
+                    }
         });
     }
 
