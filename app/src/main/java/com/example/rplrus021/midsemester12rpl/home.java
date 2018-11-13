@@ -35,7 +35,6 @@ import retrofit2.Response;
 
 public class home extends AppCompatActivity {
     public ArrayList<data> data;
-    private data data2;
     RecyclerView recyclerView;
     database_helper database;
 
