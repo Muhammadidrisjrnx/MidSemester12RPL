@@ -6,6 +6,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -17,15 +19,31 @@ public class database_helper {
         myhelper = new database_sql2(context);
     }
 
-    public long insertData(String title, String overview, String poster_path) {
+    public void insertData(data data) {
+        String sql = "INSERT INTO "+database_sql2.TABLE_NAME+" ("+database_sql2.title+", "+database_sql2.overview+", "+database_sql2.poster_path+") VALUES (?, ? , ?)";
         SQLiteDatabase dbb = myhelper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(database_sql2.title, title);
-        contentValues.put(database_sql2.overview, overview);
-        contentValues.put(database_sql2.poster_path, poster_path);
-        long id = dbb.insert(database_sql2.TABLE_NAME, null, contentValues);
-        return id;
+        SQLiteStatement stmt = dbb.compileStatement(sql);
+        stmt.bindString(1, data.getTitle());
+        stmt.bindString(2, data.getOverview());
+        stmt.bindString(3, data.getPosterPath());
+        stmt.execute();
+        stmt.clearBindings();
+
     }
+//     public void insertTransaction(data data){
+//            String sql = "INSERT INTO "+database_sql2.+" ("+NAMA+", "+NIM+", "+URL+", "+TANGGAL
+//                    +") VALUES (?, ? , ? , ?)";
+//            SQLiteStatement stmt = .compileStatement(sql);
+//            stmt.bindString(1, data.getName());
+//            stmt.bindString(2, data.getNim());
+//            stmt.bindString(3, data.getUrl());
+//            stmt.bindString(4, mahasiswaModel.gettanggal());
+//            stmt.execute();
+//            stmt.clearBindings();
+//            Log.d("sukses", "insertTransaction: ");
+//        }
+//    }
+
 
     public ArrayList<data> getData() {
         SQLiteDatabase db = myhelper.getWritableDatabase();

@@ -1,6 +1,8 @@
 package com.example.rplrus021.midsemester12rpl;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -39,7 +41,17 @@ public class now_playing extends Fragment {
         database = new database_helper(rootView.getContext());
         shimmerFrameLayout = (ShimmerFrameLayout) rootView.findViewById(R.id.shimmer_view_container);
         shimmerFrameLayout.startShimmerAnimation();
-        load_data_from_json();
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            //we are connected to a network
+            connected = true;
+            load_data_from_json();
+        } else {
+            connected = false;
+
+        }
         return rootView;
     }
 
@@ -59,6 +71,7 @@ public class now_playing extends Fragment {
                 recyclerView.setAdapter(adapter);
                 shimmerFrameLayout.stopShimmerAnimation();
                 shimmerFrameLayout.setVisibility(View.GONE);
+
             }
 
             @Override
