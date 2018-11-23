@@ -82,8 +82,9 @@ public class login extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (account != null) {
-            Intent intent = new Intent(getApplicationContext(),home.class);
+            Intent intent = new Intent(getApplicationContext(), home.class);
             startActivity(intent);
+            finish();
         }
     }
 
@@ -104,9 +105,9 @@ public class login extends AppCompatActivity {
     private void handleSignInResult(Task<GoogleSignInAccount> task) {
         try {
             account = task.getResult(ApiException.class);
-            Intent intent = new Intent(getApplicationContext(),home.class);
+            Intent intent = new Intent(getApplicationContext(), home.class);
             startActivity(intent);
-
+            finish();
             // Signed in successfully, show authenticated UI.
             //updateUI(account);
         } catch (ApiException e) {

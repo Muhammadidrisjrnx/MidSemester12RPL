@@ -2,6 +2,7 @@ package com.example.rplrus021.midsemester12rpl;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,6 +17,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,15 +29,24 @@ public class home extends AppCompatActivity {
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private GoogleSignInAccount account;
+    private GoogleSignInAccount googleSignInAccount;
     private String name;
+    private GoogleSignInClient googleSignInClient;
+    private GoogleSignInOptions googleSignInOptions;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        account = GoogleSignIn.getLastSignedInAccount(this);
+        googleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
+        googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
+        name = googleSignInAccount.getDisplayName();
+        Toast.makeText(getApplicationContext(), name, Toast.LENGTH_SHORT).show();
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
 
@@ -42,9 +57,10 @@ public class home extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (account!=null){
-            name = account.getDisplayName();
-            Toast.makeText(getApplicationContext(),name,Toast.LENGTH_SHORT).show();
+        if (googleSignInAccount == null) {
+            Intent intent = new Intent(getApplicationContext(), login.class);
+            startActivity(intent);
+            finish();
         }
     }
 
@@ -95,17 +111,28 @@ public class home extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.sign_out_menu) {
-            Intent intent = new Intent(getApplicationContext(), login.class);
-            SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.apply();
-            startActivity(intent);
-            finish();
+            sign_out();
         } else if (id == R.id.favorite_menu) {
             Intent intent = new Intent(getApplicationContext(), favorite.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sign_out() {
+        googleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Intent intent = new Intent(getApplicationContext(), login.class);
+                        SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.clear();
+                        editor.apply();
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+
     }
 }
