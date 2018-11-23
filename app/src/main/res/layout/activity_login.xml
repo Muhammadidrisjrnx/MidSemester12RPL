@@ -58,4 +58,9 @@
         android:text="Login"
         android:textAllCaps="false"
         android:background="#ccc4c4"/>
+    <com.google.android.gms.common.SignInButton
+        android:layout_below="@+id/btn_login"
+        android:id="@+id/sign_in_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </RelativeLayout>

@@ -26,7 +26,7 @@ import retrofit2.Response;
 
 
 public class now_playing extends Fragment {
-    public ArrayList<data> data;
+    public ArrayList<Result> data;
     RecyclerView recyclerView;
     database_helper database;
     View rootView;
@@ -56,14 +56,13 @@ public class now_playing extends Fragment {
     }
 
     private void load_data_from_json() {
-        final json_api service = retrofitclientinstance.getRetrofitInstance().create(json_api.class);
-        Call<jsonRespond> call = service.getJsonNowPlaying();
-        call.enqueue(new Callback<jsonRespond>() {
+        json_api service = retrofitclientinstance.getRetrofitInstance().create(json_api.class);
+        Call<jsonRespond> jsonNowPlaying = service.getJsonNowPlaying();
+        jsonNowPlaying.enqueue(new Callback<jsonRespond>() {
             @Override
             public void onResponse(Call<jsonRespond> call, Response<jsonRespond> response) {
                 jsonRespond jsonRespond = response.body();
-                data = new ArrayList<>(Arrays.asList(jsonRespond.getResults()));
-                Log.d("responku", "onResponse: " + jsonRespond.getResults());
+                data = new ArrayList<>(Arrays.asList(response.body().getResults()));
                 adapter adapter = new adapter(rootView.getContext(), data);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(rootView.getContext());
                 recyclerView.setLayoutManager(linearLayoutManager);
@@ -71,14 +70,12 @@ public class now_playing extends Fragment {
                 recyclerView.setAdapter(adapter);
                 shimmerFrameLayout.stopShimmerAnimation();
                 shimmerFrameLayout.setVisibility(View.GONE);
-
             }
 
             @Override
             public void onFailure(Call<jsonRespond> call, Throwable t) {
-                Log.d("responku", "onFailure: gagal");
+
             }
         });
-
     }
 }

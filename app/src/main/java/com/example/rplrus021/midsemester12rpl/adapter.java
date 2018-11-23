@@ -17,11 +17,11 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 public class adapter extends RecyclerView.Adapter<adapter.Holder> {
-    private ArrayList<data> data;
+    private ArrayList<Result> data;
     Context context;
     database_helper database_helper;
 
-    public adapter(Context context, ArrayList<data> data) {
+    public adapter(Context context, ArrayList<Result> data) {
         this.context = context;
         this.data = data;
         database_helper = new database_helper(context);
@@ -35,7 +35,7 @@ public class adapter extends RecyclerView.Adapter<adapter.Holder> {
 
     @Override
     public void onBindViewHolder(final Holder holder, final int position) {
-        final data data2 = data.get(position);
+        final Result data2 = data.get(position);
 
         Glide.with(context)
                 .load(only_url.url+data2.getPosterPath())

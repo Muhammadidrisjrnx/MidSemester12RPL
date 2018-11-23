@@ -26,7 +26,7 @@ import retrofit2.Response;
 public class upcoming extends Fragment {
     View root;
     RecyclerView recyclerView;
-    public ArrayList<data> data;
+    public ArrayList<Result> data;
     ShimmerFrameLayout shimmerFrameLayout;
 
     @Override

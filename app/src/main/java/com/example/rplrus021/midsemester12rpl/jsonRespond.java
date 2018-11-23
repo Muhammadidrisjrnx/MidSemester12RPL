@@ -6,9 +6,9 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class jsonRespond {
-    private data[] results;
+    private Result[] results;
 
-    public data[] getResults() {
+    public Result[] getResults() {
         return results;
     }
 
