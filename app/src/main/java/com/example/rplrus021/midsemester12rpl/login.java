@@ -2,15 +2,29 @@ package com.example.rplrus021.midsemester12rpl;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.Profile;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -18,6 +32,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 public class login extends AppCompatActivity {
     EditText edt_email, edt_password;
@@ -28,17 +46,19 @@ public class login extends AppCompatActivity {
     Toolbar toolbar;
     private GoogleSignInOptions gso;
     private GoogleSignInClient googleSignInClient;
-    private SignInButton signInButton;
+    private SignInButton signInButton_google;
     private int RC_SIGN_IN = 1;
     private GoogleSignInAccount account;
-
+    private com.facebook.login.widget.LoginButton signInButton_fb;
+    private CallbackManager callbackManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        FacebookSdk.sdkInitialize(getApplicationContext());
+       // hash_key_facebook();
         edt_email = (EditText) findViewById(R.id.edt_email);
         edt_password = (EditText) findViewById(R.id.edt_password);
         btn_login = (Button) findViewById(R.id.btn_login);
@@ -62,19 +82,66 @@ public class login extends AppCompatActivity {
                 }
             }
         });
-        signInButton = (SignInButton) findViewById(R.id.sign_in_button);
+        signInButton_google = (SignInButton) findViewById(R.id.sign_in_button_google);
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        signInButton.setOnClickListener(new View.OnClickListener() {
+        signInButton_google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sign_In();
+                sign_In_google();
             }
         });
         account = GoogleSignIn.getLastSignedInAccount(this);
+        signInButton_fb = (com.facebook.login.widget.LoginButton)findViewById(R.id.sign_in_button_fb);
+        signInButton_fb.setReadPermissions("email");
+        callbackManager = CallbackManager.Factory.create();
+        signInButton_fb.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                AccessToken accessToken = loginResult.getAccessToken();
+                boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+                Profile profile = Profile.getCurrentProfile();
+                display_name(profile);
+//                Toast.makeText(getApplicationContext(),profile.getName(),Toast.LENGTH_SHORT).show();
+//                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+
+    }
+
+    private void display_name(Profile profile) {
+        if (profile!=null){
+            Toast.makeText(getApplicationContext(),profile.getName(),Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void hash_key_facebook() {
+            try {
+                PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
+                for (Signature signature : info.signatures) {
+                    MessageDigest md = MessageDigest.getInstance("SHA");
+                    md.update(signature.toByteArray());
+                    String hashKey = new String(Base64.encode(md.digest(), 0));
+                    Log.i("TAG", "printHashKey() Hash Key: " + hashKey);
+                }
+            } catch (NoSuchAlgorithmException e) {
+                Log.e("TAG", "printHashKey()", e);
+            } catch (Exception e) {
+                Log.e("TAG", "printHashKey()", e);
+            }
 
     }
 
@@ -88,7 +155,7 @@ public class login extends AppCompatActivity {
         }
     }
 
-    private void sign_In() {
+    private void sign_In_google() {
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -99,6 +166,8 @@ public class login extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
+        }else {
+            callbackManager.onActivityResult(requestCode,resultCode,data);
         }
     }
 

@@ -60,7 +60,16 @@
         android:background="#ccc4c4"/>
     <com.google.android.gms.common.SignInButton
         android:layout_below="@+id/btn_login"
-        android:id="@+id/sign_in_button"
+        android:id="@+id/sign_in_button_google"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"/>
+    <com.facebook.login.widget.LoginButton
+        android:layout_below="@+id/sign_in_button_google"
+        android:id="@+id/sign_in_button_fb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        />
 </RelativeLayout>

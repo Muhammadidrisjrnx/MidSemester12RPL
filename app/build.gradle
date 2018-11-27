@@ -37,4 +37,5 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
+    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 }
